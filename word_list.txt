@@ -1,0 +1,24 @@
+python,5
+r,3
+sql,5
+excel,4
+tableau,4
+power bi,4
+looker,3
+jupyter,3
+sheets,3
+pandas,5
+numpy,4
+matplotlib,3
+seaborn,3
+scikit-learn,4
+plotly,3
+statsmodels,3
+beautifulsoup,3
+requests,2
+pyspark,4
+wrangling,4
+manipulation,4
+visualization,5
+modeling,4
+mining,3

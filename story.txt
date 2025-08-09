@@ -1,0 +1,155 @@
+Perfect! Here's the full 2-hour D&D one-shot campaign written in a clean, copyable format for you to paste into your favorite text editor and save as a PDF.
+
+🕯️ D&D One-Shot: The Moonlight Masquerade
+🎲 For 2 Players + 1 GM | Duration: ~2 Hours | Level 3 Adventurers
+Genre: Mystery / Fantasy / Intrigue
+🧩 Summary
+Every ten years, the magical city of Velathri hosts the Moonlight Masquerade, an elite event thrown by the mysterious Silverthorn Circle. Held at the floating Moonspire Manor, the masquerade is cloaked in glamour, secrets, and enchantments.
+
+You and your companion arrive as guests — or spies, investigators, or guards — but the festivities take a dark turn when a guest vanishes and the manor begins to warp under the light of the moon.
+
+Can you unravel the spell before the illusion collapses and traps you forever?
+
+🧙‍♀️ Character Suggestions
+Start at Level 3.
+
+Ideal party balance: One martial or stealthy character, one caster or knowledge-focused character.
+
+Create motivations for attending the masquerade: status, duty, curiosity, mystery.
+
+🗺️ Structure Overview
+🕰️ Act I: Arrival & Intrigue (30 minutes)
+Scene:
+You arrive at Moonspire Manor, a floating estate hovering over Lake Serenthia. You're escorted in magical gondolas, masked and elegant.
+
+Key Events:
+
+Meet eccentric and masked nobles.
+
+The host, Elarion Silverthorn, welcomes everyone.
+
+Mid-toast, Lady Cassia Vire vanishes — mid-sentence.
+
+A ripple in time: clocks stutter, candles relight themselves, music plays backward for a moment.
+
+Skill Checks:
+
+Perception (DC 13) – Spot magical distortions.
+
+Insight (DC 12) – Elarion hides something.
+
+Arcana (DC 14) – Something is interfering with time and illusion magic.
+
+🕰️ Act II: The Broken Illusion (30–45 minutes)
+What’s Happening:
+The manor is caught in a time-loop spell gone awry. Originally designed to preserve the perfect ball, it has started to decay. Lady Cassia tried to break the spell and is now lost between moments.
+
+Objectives:
+
+Find Cassia’s last known location.
+
+Decode enchanted clues left behind in mirrors, paintings, or through the Dancing Mask, a possessed magical mask that speaks in riddles.
+
+Encounter reality glitches: repeating conversations, reversed music, phantasmal dancers.
+
+Encounters (Choose 1–2):
+
+Phantom Duelists (use Specter stats): Try to repeat a duel from a past version of the night.
+
+Animated Masks (Swarm of Bats stats, reflavored): Swirl in chaotic emotion and attack intruders.
+
+Puzzle: A mirror maze that loops unless spoken to correctly (riddle-based challenge).
+
+🕰️ Act III: Moon Room Confrontation (30–45 minutes)
+Final Scene:
+You reach the Moon Room, a silver observatory dome with a suspended glowing orb — the Spell Anchor. Lady Cassia is trapped inside a mirror gate. The time-loop is collapsing.
+
+Options for the Finale:
+
+Combat:
+Fight a Moonspawn Wraith (use Wight or Shadow stats with radiant damage vulnerability and illusion-themed abilities). It’s a fragment of the spell’s protective defense.
+
+Puzzle Ritual:
+Break the loop using a 3-part Arcana / Religion / Performance check ritual (DC 14). Each success adds stability; each failure adds danger (1d6 psychic damage or summoned illusions).
+
+Moral Choice:
+
+Save Cassia and end the spell (the manor will crash into the lake — you must escape).
+
+Take control of the spell (gain influence over time magic, but trap others forever).
+
+Destroy the anchor and trap the manor in time permanently (no return).
+
+🧍‍♂️ Key NPCs
+Elarion Silverthorn (Elven Wizard / Host)
+Enigmatic, nostalgic, desperate to preserve a perfect evening. Knows more than he admits.
+
+Lady Cassia Vire (Human Noble / Rebel Mage)
+Curious, bold, and trying to undo the spell. Trapped between time layers.
+
+The Dancing Mask (Sentient Item)
+Mischievous, speaks only in riddles or rhymes. Knows the truth, but won’t give it easily.
+
+🎁 Rewards
+Mask of Glamour – Once per day, cast Disguise Self and gain +2 to Persuasion while worn.
+
+Favor from the nobility or the magical elite.
+
+Seeds for future adventures (e.g., invitations to magical academies, time-travel plots).
+
+🎻 Flavor Tips for the GM
+Use eerie or waltz-style music for ambiance.
+
+Describe time-glitches visually: candles flicker backward, dancers vanish mid-spin.
+
+Let players feel powerful — they're breaking reality with elegance and heart.
+
+📝 Notes for Expansion
+You can scale this one-shot up by increasing the manor's size and mystery.
+
+Add political elements: some guests want the spell to continue.
+
+Connect Cassia to a larger arc — maybe she's a time-traveling guardian or runaway noble.
+
+Requests
+PySpark
+wrangling
+manipulation
+visualization
+modeling
+mining
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
