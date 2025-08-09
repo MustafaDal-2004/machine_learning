@@ -1,2 +1,4 @@
 # machine_learning
 playing around with python to make a library for machine learning
+
+so i am tring to make a cv scanner with keywords detection i have written the code that searches through the list of words i gave it and now i am tring to build my own library to use to model the keywords so i have the scanner in the word list the weight of the word have been randomized. my objective is to create code that when given data on succesful applicants will be able to optomize the weight vectors to the most accurate form i plan to use pla algorithm have that written up in building_ai along with a little playaround of a 2 neron model for the xor problem and then i have trees.py wich is a cart algorithm that uses no imports to make dection tree. has been tested with small csv file. And a large one as well 200000 data points and to say the least the code stuggled with only my trusted laptops hardware to use
