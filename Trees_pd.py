@@ -9,10 +9,6 @@ non_numeric_columns = data.select_dtypes(exclude=['number']).columns.tolist()
 
 print(non_numeric_columns)
 
-def variance(values):
-    mean = sum(values) / len(values)
-    return sum((v - mean) ** 2 for v in values) / len(values)
-
 def splitter(data, value):
     left = [item for item in data if item >= value]
     right = [item for item in data if item < value]
