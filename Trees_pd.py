@@ -1,5 +1,5 @@
 import pandas as pd
-
+import random
 
 data = pd.read_csv('/home/mustafa/Documents/learning/insurance.csv')
 
@@ -154,4 +154,55 @@ def build_unsupervised_tree(data, depth, current_depth=0):
         'right': build_unsupervised_tree(right_data, depth, current_depth + 1)
     }
 
-print(build_unsupervised_tree(data,3))
+def build_random_forest(data, n_trees, depth_range):
+    # Shuffle the dataset rows randomly
+    data_shuffled = data.sample(frac=1).reset_index(drop=True)
+
+    # Split data into roughly equal parts using pandas slicing
+    part_size = len(data_shuffled) // n_trees
+    forest = []
+
+    for i in range(n_trees):
+        if i == n_trees - 1:  # last part gets the remainder
+            data_part = data_shuffled.iloc[i * part_size :]
+        else:
+            data_part = data_shuffled.iloc[i * part_size : (i + 1) * part_size]
+
+        # Random depth for this tree
+        random_depth = random.randint(depth_range[0], depth_range[1])
+
+        # Build the tree on this part
+        tree = build_unsupervised_tree(data_part, random_depth)
+
+        # Append tuple of (data_part, tree)
+        forest.append((data_part, tree))
+
+    return forest
+
+def majority_vote(predictions):
+    from collections import Counter
+    counter = Counter(predictions)
+    return counter.most_common(1)[0][0]
+
+def predict_forest(forest, data_row):
+    # forest: list of decision trees (your tree objects)
+    # data_row: a list or dict of feature values for the new sample
+    
+    tree_predictions = []
+    for tree in forest:
+        # For each tree, get prediction on data_row
+        prediction = predict_tree(tree, data_row)  # you should have a function like this
+        tree_predictions.append(prediction)
+    
+    # Majority vote for classification
+    final_prediction = majority_vote(tree_predictions)
+    
+    return final_prediction
+
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+forest = build_random_forest(data, n_trees=3, depth_range=(3, 6))
+
+# Print the first tree to check
+print(forest)
+
+print(build_unsupervised_tree(data,5))
