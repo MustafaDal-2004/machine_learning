@@ -1,13 +1,6 @@
 import pandas as pd
 import random
 
-data = pd.read_csv('/home/mustafa/Documents/learning/insurance.csv')
-
-print(data[1:5])
-
-non_numeric_columns = data.select_dtypes(exclude=['number']).columns.tolist()
-
-print(non_numeric_columns)
 
 def splitter(data, value):
     left = [item for item in data if item >= value]
@@ -19,39 +12,6 @@ def variance(values):
         return 0
     mean = sum(values) / len(values)
     return sum((v - mean) ** 2 for v in values) / len(values)
-
-def log2(x):
-    if x <= 0:
-        return 0 
-    count = 0
-    frac = x
-    while frac < 1:
-        frac *= 2
-        count -= 1
-    while frac >= 2:
-        frac /= 2
-        count += 1
-    result = count
-    frac -= 1
-    term = frac
-    for i in range(1, 10):  # 10-term Taylor series approximation
-        result += ((-1) ** (i + 1)) * (term ** i) / i
-    return result
-
-def entropy(rows):
-    label_counts = {}
-    for row in rows:
-        label = row[-1]
-        if label not in label_counts:
-            label_counts[label] = 0
-        label_counts[label] += 1
-
-    total = len(rows)
-    ent = 0
-    for label in label_counts:
-        p = label_counts[label] / total
-        ent -= p * log2(p)
-    return ent
 
 def best_split_numeric(data_column):
     smallest_total = float('inf')
@@ -67,40 +27,25 @@ def best_split_numeric(data_column):
 
     return best_split, smallest_total
 
-def get_combinations(items, r):
-    def combine(start, path):
-        if len(path) == r:
-            result.append(path)
-            return
-        for i in range(start, len(items)):
-            combine(i + 1, path + [items[i]])
-
-    result = []
-    combine(0, [])
-    return result
-
 def best_categorical_split(column):
-    categories = list(set(column))
+    categories = column.unique()
+    if len(categories) <= 1:
+        return None, float('inf')
+
     best_split = None
-    smallest_entropy = float('inf')
+    best_score = float('inf')
 
-    for i in range(1, len(categories) // 2 + 1):
-        for group in get_combinations(categories, i):
-            group_set = set(group)
+    for category in categories:
+        group1 = column == category
+        group2 = column != category
 
-            group1 = column[column.isin(group_set)]
-            group2 = column[~column.isin(group_set)]
+        score = abs(group1.sum() - group2.sum())
 
-            ent1 = entropy(group1)
-            ent2 = entropy(group2)
+        if score < best_score:
+            best_score = score
+            best_split = ({category}, set(categories) - {category})
 
-            total_ent = ent1 + ent2
-
-            if total_ent < smallest_entropy:
-                smallest_entropy = total_ent
-                best_split = (group_set, set(categories) - group_set)
-
-    return best_split, smallest_entropy
+    return best_split, best_score
 
 def build_unsupervised_tree(data, depth, current_depth=0):
     if current_depth >= depth:
@@ -128,18 +73,16 @@ def build_unsupervised_tree(data, depth, current_depth=0):
                 split_type = 'categorical'
 
     if best_column is None:
-        return {'leaf': data.index.tolist()}  
+        return {'leaf': data.index.tolist()}
+
     if split_type == 'numeric':
         left_data = data[data[best_column] >= best_split]
         right_data = data[data[best_column] < best_split]
-        question = f"{best_column} >= {best_split}"
     else:
         left_data = data[data[best_column].isin(best_split[0])]
         right_data = data[~data[best_column].isin(best_split[0])]
-        question = f"{best_column} in {best_split[0]}"
 
     return {
-        'question': question,
         'split_type': split_type,
         'column': best_column,
         'split_value': best_split,
@@ -149,7 +92,6 @@ def build_unsupervised_tree(data, depth, current_depth=0):
 
 def build_random_forest(data, n_trees, depth_range):
     data_shuffled = data.sample(frac=1).reset_index(drop=True)
-
     part_size = len(data_shuffled) // n_trees
     forest = []
 
@@ -160,32 +102,23 @@ def build_random_forest(data, n_trees, depth_range):
             data_part = data_shuffled.iloc[i * part_size : (i + 1) * part_size]
 
         random_depth = random.randint(depth_range[0], depth_range[1])
-
         tree = build_unsupervised_tree(data_part, random_depth)
-
         forest.append((data_part, tree))
 
     return forest
-
-def majority_vote(predictions):
-    from collections import Counter
-    counter = Counter(predictions)
-    return counter.most_common(1)[0][0]
-
-def predict_forest(forest, data_row):
-    
-    tree_predictions = []
-    for tree in forest:
-        prediction = predict_tree(tree, data_row)  
-        tree_predictions.append(prediction)
-
-    final_prediction = majority_vote(tree_predictions)
-    
-    return final_prediction
-
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-forest = build_random_forest(data, n_trees=3, depth_range=(3, 6))
+data_full = pd.read_csv('/home/mustafa/Music/titanic/train.csv')
 
-print(forest)
+data_full_test = pd.read_csv('/home/mustafa/Music/titanic/test.csv')
 
-print(build_unsupervised_tree(data,5))
+# Remove the 'Survived' column (the label)
+X_unlabeled = data_full.drop('Survived', axis=1)
+
+# If you want to keep the labels separately:
+y = data_full['Survived']
+
+print(build_random_forest(X_unlabeled, 10 ,(3,4)))
+
+
+
+
