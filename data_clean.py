@@ -1,82 +1,156 @@
-#data cleaning code
 import pandas as pd
+import math
 
-def drop_mostly_empty_columns(data, threshold=0.5):
-    missing_ratio = data.isnull().mean()
-    to_drop = missing_ratio[missing_ratio > threshold].index.tolist()
-    data = data.drop(columns=to_drop)
-    return data
+# ============================================================
+# Column Handling
+# ============================================================
 
-def get_user_selected_columns(data):
-   
-    for col in data.columns:
-        print(f"- {col}")
+def drop_mostly_empty_columns(df, threshold=0.5):
+    """
+    Drops columns where the fraction of missing values exceeds the threshold.
 
-    user_input = input("Enter comma-separated column names : ")
+    Parameters:
+        df (pd.DataFrame): Input dataset
+        threshold (float): Maximum allowed fraction of missing values
 
-    selected_cols = [col.strip() for col in user_input.split(",") if col.strip() in data.columns]
+    Returns:
+        pd.DataFrame: Dataset with sparse columns removed
+    """
+    missing_ratio = df.isnull().mean()
+    columns_to_drop = missing_ratio[missing_ratio > threshold].index
+    return df.drop(columns=columns_to_drop)
 
-    print(selected_cols)
 
-    return selected_cols
+def select_columns_to_remove(df):
+    """
+    Allows the user to interactively select columns to remove
+    (e.g., ID or index-like columns).
 
-def encode_categoricals(data):
-    for col in data:
-        if not pd.api.types.is_numeric_dtype(data[col]):
-            print(f"ncoding categorical column: {col}")
-            data[col] = data[col].astype('category').cat.codes
+    Returns:
+        list[str]: List of column names to remove
+    """
+    print("\nAvailable columns:")
+    for col in df.columns:
+        print(f" - {col}")
+
+    user_input = input("\nEnter comma-separated column names to remove: ")
+    selected = [c.strip() for c in user_input.split(",") if c.strip() in df.columns]
+
+    print(f"\nColumns selected for removal: {selected}")
+    return selected
+
+
+# ============================================================
+# Encoding
+# ============================================================
+
+def encode_categorical_columns(df):
+    """
+    Encodes non-numeric columns using category encoding.
+
+    Parameters:
+        df (pd.DataFrame): Input dataset
+
+    Returns:
+        pd.DataFrame: Dataset with categorical columns encoded
+    """
+    df = df.copy()
+
+    for col in df.columns:
+        if not pd.api.types.is_numeric_dtype(df[col]):
+            print(f"Encoding categorical column: {col}")
+            df[col] = df[col].astype("category").cat.codes
         else:
-            print(f"Column {col} is numeric. No encoding needed.")
-    return data
+            print(f"Column '{col}' is numeric. Skipping encoding.")
 
-def clean_data(data):
-    print(data[1:5])
-    col_list = []
-    print('remove id columns')
-    col_list = get_user_selected_columns(data)
+    return df
 
-    data = drop_mostly_empty_columns(data)
-    data = encode_categoricals(data)
-    data = data.drop(columns = col_list)
 
-    return data
+# ============================================================
+# Distance & Imputation
+# ============================================================
 
-def euclidean_distance(row1, row2):
-    diffs = []
-    for i in row1.index:
-        if pd.notnull(row1[i]) and pd.notnull(row2[i]):
-            diffs.append((row1[i] - row2[i]) ** 2)
-    if diffs:
-        return sum(diffs) ** 0.5
-    else:
-        return float('inf') 
+def euclidean_distance(row_a, row_b):
+    """
+    Computes Euclidean distance between two rows,
+    ignoring missing values.
+    """
+    squared_diffs = []
 
-def knn_impute(data, k=3):
-    data = data.copy()
-    
-    for col in data.columns:
-        if data[col].isnull().sum() == 0:
-            continue 
-        for idx in data[data[col].isnull()].index:
-            target_row = data.loc[idx]
-            candidates = data[data[col].notnull()].copy()
-            candidates['distance'] = candidates.drop(columns=[col]).apply(
-                lambda row: euclidean_distance(target_row.drop(labels=[col]), row), axis=1
+    for col in row_a.index:
+        if pd.notnull(row_a[col]) and pd.notnull(row_b[col]):
+            squared_diffs.append((row_a[col] - row_b[col]) ** 2)
+
+    return math.sqrt(sum(squared_diffs)) if squared_diffs else float("inf")
+
+
+def knn_impute(df, k=3):
+    """
+    Imputes missing values using K-Nearest Neighbors (KNN).
+
+    Parameters:
+        df (pd.DataFrame): Input dataset
+        k (int): Number of nearest neighbors
+
+    Returns:
+        pd.DataFrame: Dataset with missing values imputed
+    """
+    df = df.copy()
+
+    for column in df.columns:
+        if df[column].isnull().sum() == 0:
+            continue
+
+        print(f"\nImputing missing values in column: {column}")
+
+        for idx in df[df[column].isnull()].index:
+            target_row = df.loc[idx]
+            candidates = df[df[column].notnull()].copy()
+
+            candidates["distance"] = candidates.drop(columns=[column]).apply(
+                lambda row: euclidean_distance(
+                    target_row.drop(labels=[column]),
+                    row
+                ),
+                axis=1
             )
-            nearest_k = candidates.nsmallest(k, 'distance')[col]
-            imputed_value = nearest_k.mean()
-            print(f" - Imputed index {idx} with value {imputed_value}")
-            data.at[idx, col] = imputed_value
 
-    return data
+            nearest_values = candidates.nsmallest(k, "distance")[column]
+            imputed_value = nearest_values.mean()
+
+            df.at[idx, column] = imputed_value
+            print(f" - Row {idx} imputed with value {imputed_value}")
+
+    return df
 
 
-#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# ============================================================
+# Main Cleaning Pipeline
+# ============================================================
 
-data = pd.read_csv('/home/mustafa/Music/titanic/train.csv')
+def clean_dataset(df, missing_threshold=0.5, knn_k=3):
+    """
+    Full data cleaning pipeline:
+    - Drops sparse columns
+    - Removes user-selected columns
+    - Encodes categorical variables
+    - Imputes missing values using KNN
 
-data = clean_data(data)
+    Parameters:
+        df (pd.DataFrame): Raw dataset
 
-data = knn_impute(data)
+    Returns:
+        pd.DataFrame: Cleaned dataset
+    """
+    print("\nInitial data preview:")
+    print(df.head())
 
-print(data)
+    columns_to_remove = select_columns_to_remove(df)
+
+    df = drop_mostly_empty_columns(df, threshold=missing_threshold)
+    df = encode_categorical_columns(df)
+    df = df.drop(columns=columns_to_remove, errors="ignore")
+    df = knn_impute(df, k=knn_k)
+
+    return df
+
